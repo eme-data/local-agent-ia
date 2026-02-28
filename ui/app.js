@@ -48,10 +48,6 @@ function sendMessage() {
     const text = input.value.trim();
     if (!text) return;
 
-    // Retirer le message de bienvenue
-    const welcome = document.getElementById('welcome-message');
-    if (welcome) welcome.remove();
-
     // Afficher la bulle utilisateur
     addUserBubble(text);
 
@@ -228,10 +224,8 @@ async function newConversation() {
     }
     const messages = document.getElementById('messages');
     messages.innerHTML = `
-        <div id="welcome-message">
-            <div class="welcome-icon">🤖</div>
-            <h2>Bonjour !</h2>
-            <p>Je suis Autobot, ton assistant IA local. Comment puis-je t'aider ?</p>
+        <div class="message assistant">
+            <div class="bubble">Bonjour, je suis Autobot, comment puis-je vous aider ?</div>
         </div>
     `;
     setStreaming(false);
