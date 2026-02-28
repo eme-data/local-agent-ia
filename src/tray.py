@@ -1,4 +1,3 @@
-import threading
 from PIL import Image, ImageDraw
 import pystray
 
@@ -12,27 +11,35 @@ class TrayManager:
         self.icon = None
 
     def _create_icon_image(self) -> Image.Image:
-        """Crée une icône programmatique (cercle violet avec 'IA')."""
+        """Crée une icône robot pour le tray."""
         size = 64
         img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
         draw = ImageDraw.Draw(img)
-        # Cercle de fond
+
+        # Fond rond
         draw.ellipse([2, 2, size - 2, size - 2], fill="#6c63ff")
-        # Texte 'IA'
-        try:
-            from PIL import ImageFont
-            font = ImageFont.truetype("arial", 24)
-        except Exception:
-            font = ImageFont.load_default()
-        bbox = draw.textbbox((0, 0), "IA", font=font)
-        text_w = bbox[2] - bbox[0]
-        text_h = bbox[3] - bbox[1]
-        draw.text(
-            ((size - text_w) / 2, (size - text_h) / 2 - 2),
-            "IA",
-            fill="white",
-            font=font,
-        )
+
+        # Tête du robot (rectangle arrondi)
+        draw.rounded_rectangle([16, 14, 48, 40], radius=4, fill="#e0e0e0")
+
+        # Yeux
+        draw.ellipse([22, 20, 30, 28], fill="#6c63ff")
+        draw.ellipse([34, 20, 42, 28], fill="#6c63ff")
+
+        # Pupilles
+        draw.ellipse([24, 22, 28, 26], fill="#1a1a2e")
+        draw.ellipse([36, 22, 40, 26], fill="#1a1a2e")
+
+        # Bouche (sourire)
+        draw.arc([24, 28, 40, 38], start=0, end=180, fill="#1a1a2e", width=2)
+
+        # Antenne
+        draw.line([32, 14, 32, 8], fill="#e0e0e0", width=2)
+        draw.ellipse([29, 5, 35, 11], fill="#ff6b6b")
+
+        # Corps (petit rectangle)
+        draw.rounded_rectangle([20, 42, 44, 54], radius=3, fill="#e0e0e0")
+
         return img
 
     def _on_show(self, icon, item):
@@ -60,9 +67,9 @@ class TrayManager:
         )
 
         self.icon = pystray.Icon(
-            name="AgentIA",
+            name="Autobot",
             icon=self._create_icon_image(),
-            title="Agent IA",
+            title="Autobot",
             menu=menu,
         )
         self.icon.run()

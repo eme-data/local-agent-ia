@@ -1,13 +1,38 @@
-# Agent IA Local
+# 🤖 Autobot
 
-Agent conversationnel desktop connecté à l'API Anthropic (Claude) avec interface graphique et icône system tray. Cross-platform Windows / macOS.
+Assistant IA desktop connecté à l'API Anthropic (Claude) avec interface graphique et icône system tray. Cross-platform Windows / macOS.
+
+## Installation en un clic
+
+### Option 1 : Télécharger l'exécutable (recommandé)
+
+Rendez-vous sur la page [Releases](https://github.com/eme-data/local-agent-ia/releases) et téléchargez :
+- **Windows** : `Autobot.exe`
+- **macOS** : `Autobot.dmg`
+
+Lancez le fichier, c'est prêt !
+
+> **Note** : Au premier lancement, Autobot vous demandera votre clé API Anthropic.
+> Obtenez-la sur [console.anthropic.com](https://console.anthropic.com/).
+
+### Option 2 : Installation depuis les sources
+
+**Windows** : Double-cliquez sur `scripts\install-windows.bat`
+
+**macOS / Linux** :
+```bash
+chmod +x scripts/install-mac.sh
+./scripts/install-mac.sh
+```
+
+Puis lancez avec `lancer.bat` (Windows) ou `./lancer.sh` (Mac).
 
 ## Fonctionnalités
 
 - **Interface desktop** : fenêtre chat avec dark theme, rendu Markdown, coloration syntaxique
-- **Icône system tray** : accès rapide, fonctionne en arrière-plan
+- **Icône system tray** : petit robot dans la barre des tâches, fonctionne en arrière-plan
 - **Streaming** : réponses en temps réel, token par token
-- **Boucle agentic** : l'agent enchaîne plusieurs outils automatiquement
+- **Boucle agentic** : Autobot enchaîne plusieurs outils automatiquement
 - **Mémoire persistante** : conversations, notes et rappels sauvegardés en SQLite
 - **9 outils intégrés** :
 
@@ -23,29 +48,16 @@ Agent conversationnel desktop connecté à l'API Anthropic (Claude) avec interfa
 | `manage_notes` | Créer, lister, modifier, supprimer des notes |
 | `manage_reminders` | Créer et gérer des rappels |
 
-## Installation
-
-```bash
-# Créer un environnement virtuel
-python -m venv venv
-
-# Activer l'environnement
-# Windows :
-venv\Scripts\activate
-# Mac/Linux :
-source venv/bin/activate
-
-# Installer les dépendances
-pip install -r requirements.txt
-```
-
 ## Configuration
 
-```bash
-cp .env.example .env
-# Éditer .env et ajouter ta clé API Anthropic :
-# ANTHROPIC_API_KEY=sk-ant-xxxxx
-```
+La clé API Anthropic peut être définie de deux manières :
+
+1. **Fichier `.env`** à la racine du projet :
+   ```
+   ANTHROPIC_API_KEY=sk-ant-xxxxx
+   ```
+
+2. **Variable d'environnement** système `ANTHROPIC_API_KEY`
 
 ## Utilisation
 
@@ -55,38 +67,50 @@ cp .env.example .env
 python app.py
 ```
 
-Lance la fenêtre de chat + icône system tray.
-
 ### Mode CLI
 
 ```bash
 python main.py
 ```
 
-Interface terminal avec Rich. Commandes : `/quit`, `/reset`.
+Commandes CLI : `/quit` pour quitter, `/reset` pour nouvelle conversation.
+
+## Build depuis les sources
+
+Pour créer un exécutable standalone :
+
+```bash
+pip install pyinstaller
+python build.py
+```
+
+L'exécutable sera dans `dist/`.
 
 ## Structure
 
 ```
 ├── app.py                # Point d'entrée desktop (pywebview + tray)
 ├── main.py               # Point d'entrée CLI
+├── build.py              # Script de build PyInstaller
 ├── src/
-│   ├── agent.py          # Agent principal (boucle agentic + streaming)
-│   ├── config.py         # Configuration (API, chemins, prompt système)
+│   ├── agent.py          # Agent (boucle agentic + streaming)
+│   ├── config.py         # Configuration
 │   ├── database.py       # Persistance SQLite
-│   ├── tray.py           # Icône system tray
+│   ├── tray.py           # Icône system tray (robot)
 │   └── tools/
-│       ├── __init__.py   # Agrégation des outils
-│       ├── filesystem.py # Commandes, lecture/écriture fichiers
+│       ├── filesystem.py # Commandes, fichiers
 │       ├── system.py     # Infos système, presse-papier
-│       ├── web.py        # Recherche web DuckDuckGo
+│       ├── web.py        # Recherche web
 │       └── productivity.py # Notes et rappels
 ├── ui/
-│   ├── index.html        # Interface chat HTML
-│   ├── style.css         # Styles dark theme
-│   └── app.js            # Logique frontend (streaming)
-├── .env.example
-└── requirements.txt
+│   ├── index.html        # Interface chat
+│   ├── style.css         # Dark theme
+│   └── app.js            # Frontend (streaming)
+├── scripts/
+│   ├── install-windows.bat
+│   └── install-mac.sh
+└── .github/workflows/
+    └── build.yml         # CI/CD : build auto + release GitHub
 ```
 
 ## Stack technique
@@ -94,5 +118,6 @@ Interface terminal avec Rich. Commandes : `/quit`, `/reset`.
 - **Backend** : Python + Anthropic SDK
 - **Frontend** : HTML/CSS/JS dans pywebview (WebView2 Windows / WebKit macOS)
 - **Tray** : pystray + Pillow
-- **Base de données** : SQLite (conversations, notes, rappels)
+- **Base de données** : SQLite
 - **Recherche web** : DuckDuckGo (gratuit, sans clé API)
+- **CI/CD** : GitHub Actions + PyInstaller

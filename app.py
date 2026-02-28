@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Point d'entrée de l'application desktop Agent IA."""
+"""Point d'entrée de l'application desktop Autobot."""
 
 import json
 import os
@@ -90,7 +90,7 @@ def main():
 
     # Créer la fenêtre
     window = webview.create_window(
-        title="Agent IA",
+        title="Autobot",
         url=resource_path("ui/index.html"),
         js_api=api,
         width=420,

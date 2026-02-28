@@ -231,7 +231,7 @@ async function newConversation() {
         <div id="welcome-message">
             <div class="welcome-icon">🤖</div>
             <h2>Bonjour !</h2>
-            <p>Je suis ton assistant IA local. Comment puis-je t'aider ?</p>
+            <p>Je suis Autobot, ton assistant IA local. Comment puis-je t'aider ?</p>
         </div>
     `;
     setStreaming(false);

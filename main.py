@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Point d'entrée CLI de l'agent IA local."""
+"""Point d'entrée CLI de Autobot."""
 
 from rich.console import Console
 from rich.markdown import Markdown
@@ -15,7 +15,7 @@ console = Console()
 def main():
     console.print(
         Panel(
-            "[bold]Agent IA Local[/bold]\n"
+            "[bold]Autobot[/bold]\n"
             "Tape ton message pour discuter. Commandes spéciales :\n"
             "  [cyan]/quit[/cyan]  — Quitter\n"
             "  [cyan]/reset[/cyan] — Nouvelle conversation",
