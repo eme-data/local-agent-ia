@@ -1,5 +1,6 @@
+import os
 import anthropic
-from src.config import ANTHROPIC_API_KEY, MODEL, MAX_TOKENS, get_system_prompt
+from src.config import MODEL, MAX_TOKENS, get_system_prompt
 from src.tools import TOOL_DEFINITIONS, execute_tool
 
 
@@ -7,12 +8,13 @@ class Agent:
     """Agent conversationnel local connecté à l'API Anthropic."""
 
     def __init__(self, db=None):
-        if not ANTHROPIC_API_KEY:
+        api_key = os.getenv("ANTHROPIC_API_KEY")
+        if not api_key:
             raise ValueError(
                 "ANTHROPIC_API_KEY manquante. "
                 "Copie .env.example en .env et ajoute ta clé API."
             )
-        self.client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+        self.client = anthropic.Anthropic(api_key=api_key)
         self.conversation: list[dict] = []
         self.db = db
         self.conversation_id = None
