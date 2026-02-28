@@ -1,12 +1,26 @@
 #!/usr/bin/env python3
 """Script de build pour créer l'exécutable avec PyInstaller."""
 
+import os
 import platform
 import subprocess
 import sys
 
 
+def generate_icons():
+    """Génère les icônes si elles n'existent pas."""
+    ico_path = os.path.join("ui", "assets", "icon.ico")
+    if not os.path.exists(ico_path):
+        print("Génération des icônes...")
+        subprocess.run(
+            [sys.executable, os.path.join("scripts", "generate_icon.py")],
+            check=True,
+        )
+
+
 def build():
+    generate_icons()
+
     system = platform.system()
     separator = ";" if system == "Windows" else ":"
 
@@ -15,7 +29,7 @@ def build():
         "--name", "Autobot",
         "--windowed",
         "--onefile",
-        f"--add-data", f"ui{separator}ui",
+        "--add-data", f"ui{separator}ui",
         "--hidden-import", "webview",
         "--hidden-import", "pystray",
         "--hidden-import", "clr_loader",
@@ -27,11 +41,14 @@ def build():
     ]
 
     # Icônes spécifiques à la plateforme
-    if system == "Windows":
-        cmd.extend(["--icon", "ui/assets/icon.ico"])
-    elif system == "Darwin":
+    ico_path = os.path.join("ui", "assets", "icon.ico")
+    icns_path = os.path.join("ui", "assets", "icon.icns")
+
+    if system == "Windows" and os.path.exists(ico_path):
+        cmd.extend(["--icon", ico_path])
+    elif system == "Darwin" and os.path.exists(icns_path):
         cmd.extend([
-            "--icon", "ui/assets/icon.icns",
+            "--icon", icns_path,
             "--osx-bundle-identifier", "com.autobot.app",
         ])
 
