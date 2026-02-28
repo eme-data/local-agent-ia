@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent IA</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Marked.js pour le rendu Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Highlight.js pour la coloration syntaxique -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github-dark.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11/highlight.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <div id="header">
+            <div id="header-title">
+                <span id="header-icon">🤖</span>
+                <span>Agent IA</span>
+            </div>
+            <div id="header-actions">
+                <button id="btn-new" title="Nouvelle conversation" onclick="newConversation()">+</button>
+                <button id="btn-history" title="Historique" onclick="toggleHistory()">☰</button>
+            </div>
+        </div>
+
+        <!-- Panneau historique -->
+        <div id="history-panel" class="hidden">
+            <div id="history-header">
+                <span>Conversations</span>
+                <button onclick="toggleHistory()">✕</button>
+            </div>
+            <div id="history-list"></div>
+        </div>
+
+        <!-- Zone de messages -->
+        <div id="messages">
+            <div id="welcome-message">
+                <div class="welcome-icon">🤖</div>
+                <h2>Bonjour !</h2>
+                <p>Je suis ton assistant IA local. Comment puis-je t'aider ?</p>
+            </div>
+        </div>
+
+        <!-- Zone de saisie -->
+        <div id="input-area">
+            <textarea
+                id="message-input"
+                placeholder="Écris ton message..."
+                rows="1"
+                autofocus
+            ></textarea>
+            <button id="btn-send" onclick="sendMessage()" title="Envoyer">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 2L11 13"></path>
+                    <path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""Point d'entrée de l'agent IA local."""
+"""Point d'entrée CLI de l'agent IA local."""
 
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
 
 from src.agent import Agent
+from src.database import Database
+from src.tools import init_tools
 
 console = Console()
 
@@ -22,8 +24,11 @@ def main():
         )
     )
 
+    db = Database()
+    init_tools(db=db)
+
     try:
-        agent = Agent()
+        agent = Agent(db=db)
     except ValueError as e:
         console.print(f"[red]Erreur: {e}[/red]")
         return
@@ -54,6 +59,8 @@ def main():
 
         console.print()
         console.print(Markdown(response))
+
+    db.close()
 
 
 if __name__ == "__main__":

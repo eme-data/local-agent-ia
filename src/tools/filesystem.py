@@ -1,10 +1,6 @@
 import os
 import subprocess
-import platform
 from datetime import datetime
-
-
-# --- Définitions des outils pour l'API Anthropic ---
 
 TOOL_DEFINITIONS = [
     {
@@ -68,19 +64,7 @@ TOOL_DEFINITIONS = [
             "required": [],
         },
     },
-    {
-        "name": "get_system_info",
-        "description": "Retourne des informations sur le système (OS, architecture, date/heure, répertoire courant).",
-        "input_schema": {
-            "type": "object",
-            "properties": {},
-            "required": [],
-        },
-    },
 ]
-
-
-# --- Implémentation des outils ---
 
 
 def run_command(command: str) -> str:
@@ -146,33 +130,9 @@ def list_directory(path: str = ".") -> str:
         return f"Erreur: {e}"
 
 
-def get_system_info() -> str:
-    """Retourne les informations système."""
-    info = {
-        "OS": f"{platform.system()} {platform.release()}",
-        "Architecture": platform.machine(),
-        "Python": platform.python_version(),
-        "Date/Heure": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "Répertoire courant": os.getcwd(),
-        "Utilisateur": os.getenv("USER") or os.getenv("USERNAME", "inconnu"),
-    }
-    return "\n".join(f"{k}: {v}" for k, v in info.items())
-
-
-# --- Dispatch ---
-
 TOOL_HANDLERS = {
     "run_command": lambda args: run_command(args["command"]),
     "read_file": lambda args: read_file(args["path"]),
     "write_file": lambda args: write_file(args["path"], args["content"]),
     "list_directory": lambda args: list_directory(args.get("path", ".")),
-    "get_system_info": lambda args: get_system_info(),
 }
-
-
-def execute_tool(name: str, args: dict) -> str:
-    """Exécute un outil par son nom avec les arguments donnés."""
-    handler = TOOL_HANDLERS.get(name)
-    if handler is None:
-        return f"Outil inconnu: {name}"
-    return handler(args)
